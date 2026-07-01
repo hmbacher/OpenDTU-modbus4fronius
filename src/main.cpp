@@ -14,6 +14,7 @@
 #include "MqttHandleHass.h"
 #include "MqttHandleInverter.h"
 #include "MqttHandleInverterTotal.h"
+#include "ModbusDtu.h"
 #include "MqttSettings.h"
 #include "NetworkSettings.h"
 #include "NtpSettings.h"
@@ -124,6 +125,10 @@ void setup()
     LedSingle.init(scheduler);
 
     InverterSettings.init(scheduler);
+
+    // Initialize Modbus TCP / SunSpec meter (depends on inverters being registered)
+    ESP_LOGI(TAG, "Initializing Modbus TCP...");
+    ModbusDtu.init(scheduler);
 
     Datastore.init(scheduler);
     RestartHelper.init(scheduler);

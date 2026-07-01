@@ -97,4 +97,10 @@ enum WebApiError {
 
     HardwareBase = 12000,
     HardwarePinMappingLength,
+
+    ModbusBase = 13000,
+    ModbusPortInvalid = 13001,
+    ModbusRepresentationInvalid = 13004,
+    ModbusUpdateIntervalInvalid = 13006,
+    ModbusStringLength = 13007,
 };

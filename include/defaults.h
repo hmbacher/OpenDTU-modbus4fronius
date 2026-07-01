@@ -95,6 +95,17 @@
 #define MQTT_HASS_TOPIC "homeassistant/"
 #define MQTT_HASS_INDIVIDUALPANELS false
 
+#define MODBUS_ENABLED false
+#define MODBUS_TEST_MODE false
+#define MODBUS_PORT 502U
+#define MODBUS_REPRESENTATION 0U // 0 = float (model 211), 1 = int+SF (model 201)
+#define MODBUS_SIGN -1 // production reported as negative power (Fronius expects this; Alois hardcodes it)
+#define MODBUS_UPDATE_INTERVAL 1000U // milliseconds
+#define MODBUS_MANUFACTURER "Hoymiles"
+#define MODBUS_MODEL "" // empty -> derived from the reference inverter type
+#define MODBUS_VERSION "1.0"
+#define MODBUS_REFERENCE_INVERTER 0U
+
 #define DEV_PINMAPPING ""
 
 #define DISPLAY_POWERSAFE true

@@ -126,9 +126,9 @@ export default defineComponent({
         },
         versionInfoUrl(): string {
             if (this.systemStatus.git_is_hash) {
-                return 'https://github.com/tbnobody/OpenDTU/commits/' + this.systemStatus.git_hash;
+                return 'https://github.com/hmbacher/OpenDTU-modbus4fronius/commits/' + this.systemStatus.git_hash;
             }
-            return 'https://github.com/tbnobody/OpenDTU/releases/tag/' + this.systemStatus.git_hash;
+            return 'https://github.com/hmbacher/OpenDTU-modbus4fronius/releases/tag/' + this.systemStatus.git_hash;
         },
     },
 });

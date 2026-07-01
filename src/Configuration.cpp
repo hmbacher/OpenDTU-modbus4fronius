@@ -111,6 +111,23 @@ bool ConfigurationClass::write()
     dtu["cmt_frequency"] = config.Dtu.Cmt.Frequency;
     dtu["cmt_country_mode"] = config.Dtu.Cmt.CountryMode;
 
+    JsonObject modbus = doc["modbus"].to<JsonObject>();
+    modbus["enabled"] = config.Modbus.Enabled;
+    modbus["test_mode"] = config.Modbus.TestMode;
+    modbus["port"] = config.Modbus.Port;
+    modbus["representation"] = config.Modbus.Representation;
+    modbus["sign"] = config.Modbus.Sign;
+    modbus["update_interval"] = config.Modbus.UpdateInterval;
+    modbus["manufacturer"] = config.Modbus.ManufacturerName;
+    modbus["model"] = config.Modbus.ModelName;
+    modbus["serial"] = config.Modbus.SerialStr;
+    modbus["version"] = config.Modbus.VersionStr;
+    modbus["reference_inverter"] = config.Modbus.ReferenceInverter;
+    JsonArray modbus_inverters = modbus["include_inverter"].to<JsonArray>();
+    for (uint8_t i = 0; i < INV_MAX_COUNT; i++) {
+        modbus_inverters.add(config.Modbus.IncludeInverter[i]);
+    }
+
     JsonObject security = doc["security"].to<JsonObject>();
     security["password"] = config.Security.Password;
     security["allow_readonly"] = config.Security.AllowReadonly;
@@ -300,6 +317,24 @@ bool ConfigurationClass::read()
     config.Dtu.Cmt.Frequency = dtu["cmt_frequency"] | DTU_CMT_FREQUENCY;
     config.Dtu.Cmt.CountryMode = dtu["cmt_country_mode"] | DTU_CMT_COUNTRY_MODE;
 
+    JsonObject modbus = doc["modbus"];
+    config.Modbus.Enabled = modbus["enabled"] | MODBUS_ENABLED;
+    config.Modbus.TestMode = modbus["test_mode"] | MODBUS_TEST_MODE;
+    config.Modbus.Port = modbus["port"] | MODBUS_PORT;
+    config.Modbus.Representation = modbus["representation"] | MODBUS_REPRESENTATION;
+    config.Modbus.Sign = modbus["sign"] | MODBUS_SIGN;
+    config.Modbus.UpdateInterval = modbus["update_interval"] | MODBUS_UPDATE_INTERVAL;
+    strlcpy(config.Modbus.ManufacturerName, modbus["manufacturer"] | MODBUS_MANUFACTURER, sizeof(config.Modbus.ManufacturerName));
+    strlcpy(config.Modbus.ModelName, modbus["model"] | MODBUS_MODEL, sizeof(config.Modbus.ModelName));
+    strlcpy(config.Modbus.SerialStr, modbus["serial"] | "", sizeof(config.Modbus.SerialStr));
+    strlcpy(config.Modbus.VersionStr, modbus["version"] | MODBUS_VERSION, sizeof(config.Modbus.VersionStr));
+    config.Modbus.ReferenceInverter = modbus["reference_inverter"] | MODBUS_REFERENCE_INVERTER;
+    JsonArray modbus_inverters = modbus["include_inverter"];
+    for (uint8_t i = 0; i < INV_MAX_COUNT; i++) {
+        // Default to included, so enabling Modbus on a fresh config feeds all inverters
+        config.Modbus.IncludeInverter[i] = modbus_inverters[i] | true;
+    }
+
     JsonObject security = doc["security"];
     strlcpy(config.Security.Password, security["password"] | ACCESS_POINT_PASSWORD, sizeof(config.Security.Password));
     config.Security.AllowReadonly = security["allow_readonly"] | SECURITY_ALLOW_READONLY;
@@ -457,6 +492,14 @@ void ConfigurationClass::migrate()
         config.Logging.Default = ESP_LOG_VERBOSE;
         strlcpy(config.Logging.Modules[0].Name, "CORE", sizeof(config.Logging.Modules[0].Name));
         config.Logging.Modules[0].Level = ESP_LOG_ERROR;
+    }
+
+    if (config.Cfg.Version < 0x00011f00) {
+        // New Modbus/SunSpec meter block; defaults are applied automatically by read().
+    }
+
+    if (config.Cfg.Version < 0x00012000) {
+        // Removed Modbus.SlaveId and Modbus.BaseAddress (always 1 / 40000 now); nothing to migrate.
     }
 
     f.close();

@@ -8,7 +8,7 @@
 #include <mutex>
 
 #define CONFIG_FILENAME "/config.json"
-#define CONFIG_VERSION 0x00011e00 // 0.1.30 // make sure to clean all after change
+#define CONFIG_VERSION 0x00012000 // 0.1.32 // make sure to clean all after change
 
 #define WIFI_MAX_SSID_STRLEN 32
 #define WIFI_MAX_PASSWORD_STRLEN 64
@@ -35,6 +35,8 @@
 
 #define DEV_MAX_MAPPING_NAME_STRLEN 63
 #define LOCALE_STRLEN 2
+
+#define MODBUS_MAX_STR_STRLEN 32
 
 #define LOG_MODULE_COUNT 16
 #define LOG_MODULE_NAME_STRLEN 32
@@ -146,6 +148,21 @@ struct CONFIG_T {
             uint8_t CountryMode;
         } Cmt;
     } Dtu;
+
+    struct {
+        bool Enabled;
+        bool TestMode; // serve constant test values instead of live inverter data
+        uint16_t Port;
+        uint8_t Representation; // 0 = float (model 211), 1 = int+SF (model 201)
+        int8_t Sign; // +1 generator convention, -1 feed-in convention
+        uint32_t UpdateInterval; // milliseconds
+        char ManufacturerName[MODBUS_MAX_STR_STRLEN + 1];
+        char ModelName[MODBUS_MAX_STR_STRLEN + 1];
+        char SerialStr[MODBUS_MAX_STR_STRLEN + 1];
+        char VersionStr[MODBUS_MAX_STR_STRLEN + 1];
+        uint8_t ReferenceInverter; // index into Inverter[] used for voltage/frequency/PF
+        bool IncludeInverter[INV_MAX_COUNT]; // aligned to Inverter[] index
+    } Modbus;
 
     struct {
         char Password[WIFI_MAX_PASSWORD_STRLEN + 1];

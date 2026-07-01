@@ -10,6 +10,8 @@ import InverterAdminView from '@/views/InverterAdminView.vue';
 import LoginView from '@/views/LoginView.vue';
 import MaintenanceRebootView from '@/views/MaintenanceRebootView.vue';
 import LoggingAdminView from '@/views/LoggingAdminView.vue';
+import ModbusAdminView from '@/views/ModbusAdminView.vue';
+import ModbusInfoView from '@/views/ModbusInfoView.vue';
 import MqttAdminView from '@/views/MqttAdminView.vue';
 import MqttInfoView from '@/views/MqttInfoView.vue';
 import NetworkAdminView from '@/views/NetworkAdminView.vue';
@@ -73,6 +75,11 @@ const router = createRouter({
             component: MqttInfoView,
         },
         {
+            path: '/info/modbus',
+            name: 'Modbus',
+            component: ModbusInfoView,
+        },
+        {
             path: '/info/console',
             name: 'Web Console',
             component: ConsoleInfoView,
@@ -101,6 +108,11 @@ const router = createRouter({
             path: '/settings/dtu',
             name: 'DTU Settings',
             component: DtuAdminView,
+        },
+        {
+            path: '/settings/modbus',
+            name: 'Modbus Settings',
+            component: ModbusAdminView,
         },
         {
             path: '/settings/device',

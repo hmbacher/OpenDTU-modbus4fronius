@@ -8,7 +8,7 @@
 
                 <BIconSun v-else width="30" height="30" class="d-inline-block align-text-top text-warning" />
 
-                <span style="margin-left: 0.5rem"> OpenDTU </span>
+                <span style="margin-left: 0.5rem"> OpenDTU Modbus4Fronius </span>
             </router-link>
             <button
                 class="navbar-toggler"
@@ -74,6 +74,11 @@
                                 }}</router-link>
                             </li>
                             <li>
+                                <router-link @click="onClick" class="dropdown-item" to="/settings/modbus">{{
+                                    $t('menu.ModbusSettings')
+                                }}</router-link>
+                            </li>
+                            <li>
                                 <router-link @click="onClick" class="dropdown-item" to="/settings/device">{{
                                     $t('menu.DeviceManager')
                                 }}</router-link>
@@ -128,6 +133,11 @@
                             <li>
                                 <router-link @click="onClick" class="dropdown-item" to="/info/mqtt">{{
                                     $t('menu.MQTT')
+                                }}</router-link>
+                            </li>
+                            <li>
+                                <router-link @click="onClick" class="dropdown-item" to="/info/modbus">{{
+                                    $t('menu.Modbus')
                                 }}</router-link>
                             </li>
                             <li>

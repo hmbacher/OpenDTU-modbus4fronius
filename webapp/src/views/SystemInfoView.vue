@@ -70,11 +70,14 @@ export default defineComponent({
                 ? this.systemDataList.git_hash?.substring(1)
                 : this.systemDataList.git_hash;
 
-            // Handle format "v0.1-5-gabcdefh"
-            if (this.systemDataList.git_hash?.lastIndexOf('-') >= 0) {
-                this.systemDataList.git_hash = this.systemDataList.git_hash.substring(
-                    this.systemDataList.git_hash.lastIndexOf('-') + 2
-                );
+            // Handle git-describe format "v0.1-5-gabcdefh": collapse to the short commit
+            // hash, but only when the segment after the last '-' starts with 'g' (the
+            // "-g<sha>" marker). A plain release tag such as
+            // "v26.3.30-modbus4fronius-537c5551" has no such marker and is kept intact.
+            const gitHash = this.systemDataList.git_hash ?? '';
+            const lastDash = gitHash.lastIndexOf('-');
+            if (lastDash >= 0 && gitHash.charAt(lastDash + 1) === 'g') {
+                this.systemDataList.git_hash = gitHash.substring(lastDash + 2);
                 this.systemDataList.git_is_hash = true;
             }
 
@@ -83,7 +86,7 @@ export default defineComponent({
             }
 
             const fetchUrl =
-                'https://api.github.com/repos/tbnobody/OpenDTU/compare/' +
+                'https://api.github.com/repos/hmbacher/OpenDTU-modbus4fronius/compare/' +
                 this.systemDataList.git_hash +
                 '...' +
                 this.systemDataList.git_branch;

@@ -12,7 +12,7 @@ static const char* TAG = "logging";
 
 LoggingClass::LoggingClass()
 {
-    _configurableModules.reserve(7);
+    _configurableModules.reserve(8);
     _configurableModules.push_back("CORE");
     _configurableModules.push_back("hoymiles");
     _configurableModules.push_back("mqtt");
@@ -20,6 +20,7 @@ LoggingClass::LoggingClass()
     _configurableModules.push_back("webapi");
     _configurableModules.push_back("async_ws");
     _configurableModules.push_back("async_tcp");
+    _configurableModules.push_back("modbus");
 }
 
 const std::vector<String>& LoggingClass::getConfigurableModules() const
